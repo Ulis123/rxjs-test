@@ -3,7 +3,6 @@ import {recursiveChangeData} from "../helpers/recursiveChangeData";
 import EventEmitter from "events";
 
 let initialState = {
-  system: "humidity",
   data: 0,
   error: "",
 };
