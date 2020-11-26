@@ -35,7 +35,7 @@ const App = () => {
 
   return (
     <div className="App">
-      {allData.some(el => el.data !== null)
+      {allData.every(el => el.data !== null)
         ? systems.map((el) => {
           return (
             <MonitoringSystemBlock
