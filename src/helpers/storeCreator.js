@@ -4,6 +4,7 @@ import {BehaviorSubject} from "rxjs";
 
 export const storeCreator = (system, systemName) => {
   let initialState = {
+    system: systemName,
     data: null,
     error: "",
   };
@@ -16,7 +17,7 @@ export const storeCreator = (system, systemName) => {
     subject.next(state);
   })
 
-  return subject;
+  return {subject, initialState};
 }
 
 

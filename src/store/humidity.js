@@ -3,6 +3,4 @@ import {storeCreator} from "../helpers/storeCreator";
 
 const humidity = new EventEmitter();
 
-const subject = storeCreator(humidity, "humidity");
-
-export default subject;
+export default storeCreator(humidity, "humidity");

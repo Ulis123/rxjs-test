@@ -1,36 +1,49 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import './App.css';
 import MonitoringSystemBlock from "./components/MonitoringSystemBlock";
 import humidityStore from "./store/humidity";
 import airPressureStore from "./store/airPressure";
 import temperatureStore from "./store/temperature";
 
-const App = () => {
-  const [humidity, setHumidity] = useState(null);
-  const [temperature, setTemperature] = useState(null);
-  const [airPressure, setAirPressure] = useState(null);
+import {merge} from 'rxjs';
 
-  useEffect(()=> {
-    const subsH = humidityStore.subscribe(setHumidity);
-    const subsA = airPressureStore.subscribe(setAirPressure);
-    const subsT = temperatureStore.subscribe(setTemperature);
+const App = () => {
+  const [allData, setAllData] = useState(
+    [
+      airPressureStore.initialState,
+      humidityStore.initialState,
+      temperatureStore.initialState
+    ]);
+
+  useEffect(() => {
+    const sub = merge(humidityStore.subject, airPressureStore.subject, temperatureStore.subject)
+      .subscribe((value) => setAllData((prev) => [...prev.map((el) => {
+        if (el.system === value.system) return value;
+        return el;
+      })]));
 
     return () => {
-      subsH.unsubscribe();
-      subsA.unsubscribe();
-      subsT.unsubscribe();
+      sub.unsubscribe()
     }
-  },[]);
+  }, []);
+
+  const systems = [
+    {title: "Temperature", system: "temperature"},
+    {title: "Temperature", system: "airPressure"},
+    {title: "Temperature", system: "humidity"}
+  ];
 
   return (
     <div className="App">
-      {temperature || airPressure || humidity ? (
-        <>
-          <MonitoringSystemBlock title="Temperature" data={temperature} />
-          <MonitoringSystemBlock title="Air pressure" data={airPressure} />
-          <MonitoringSystemBlock title="Humidity" data={humidity} />
-        </>
-        ) : null}
+      {allData.some(el => el.data !== null)
+        ? systems.map((el) => {
+          return (
+            <MonitoringSystemBlock
+              key={el.system} title={el.title}
+              data={allData.find((item) => item.system === el.system)} />
+            )
+        })
+        : null}
     </div>
   );
 }
