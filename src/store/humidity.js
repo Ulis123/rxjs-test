@@ -1,20 +1,8 @@
-import { BehaviorSubject } from "rxjs";
-import {recursiveChangeData} from "../helpers/recursiveChangeData";
 import EventEmitter from "events";
-
-let initialState = {
-  data: 0,
-  error: "",
-};
+import {storeCreator} from "../helpers/storeCreator";
 
 const humidity = new EventEmitter();
 
-recursiveChangeData(humidity, "humidity");
-
-const subject = new BehaviorSubject(initialState);
-
-humidity.on('humidity', (state) => {
-  subject.next(state);
-})
+const subject = storeCreator(humidity, "humidity");
 
 export default subject;

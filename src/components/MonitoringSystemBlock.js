@@ -4,7 +4,7 @@ const MonitoringSystemBlock = ({title, data}) => {
   return (
     <div className="monitoringSystemBlock">
       <h4>{title}</h4>
-      <p>{data.error ? "N/A" : data.data}</p>
+      <p>{data.error || !data.data ? "N/A" : data.data}</p>
     </div>
   );
 };

@@ -24,7 +24,7 @@ const App = () => {
 
   return (
     <div className="App">
-      {temperature && airPressure && humidity ? (
+      {temperature || airPressure || humidity ? (
         <>
           <MonitoringSystemBlock title="Temperature" data={temperature} />
           <MonitoringSystemBlock title="Air pressure" data={airPressure} />
